@@ -2,46 +2,45 @@ package com.zuitt.discussion.controller;
 
 
 import com.zuitt.discussion.model.User;
+import com.zuitt.discussion.services.users.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 public class UserController {
 
+    @Autowired
+    private UserService userService;
 
 
     @GetMapping("/users")
-    public String getAllUsers(){
-        return "All users has been retrieved|";
-    }
-
-
-    @GetMapping("/users/{userId}")
-    public String getAllUsers(@PathVariable int userId){
-        return "Viewing details of user " + userId;
+    public Iterable<User> getAllUsers(){
+        return userService.getUsers();
     }
 
     @PostMapping("/users")
     public String addUser(@RequestBody User user){
-
-        return "New User " + user.getUsername() + " has been added";
-
+        userService.saveUser(user);
+        return "User created Successfully";
     }
 
+    @GetMapping("/users/{userId}")
+    public ResponseEntity getUserById(@PathVariable int userId){
+        return userService.getUserById(userId);
+    }
 
     @PutMapping("/users/{userId}")
-    public User getUser(@PathVariable int userId, @RequestBody User user){
+    public String updateUserById(@PathVariable int userId, @RequestBody User user){
+        userService.updateUser(userId, user);
 
-        return user;
+        return "User updated successfully";
     }
 
-
     @DeleteMapping("/users/{userId}")
-    public String deleteUser(@RequestHeader(value="Authorization") String name){
-
-        if(name.isEmpty())
-            return "Unauthorized access";
-
-        return String.format("Posts from user %s has been deleted!", name);
+    public ResponseEntity deleteUser(@PathVariable int userId){
+        return userService.deleteUserById(userId);
     }
 
 

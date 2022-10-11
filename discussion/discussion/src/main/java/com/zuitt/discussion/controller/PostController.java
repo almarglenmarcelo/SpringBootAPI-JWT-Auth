@@ -1,47 +1,51 @@
 package com.zuitt.discussion.controller;
 
 import com.zuitt.discussion.model.Post;
+import com.zuitt.discussion.services.posts.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+//CORS - Cross Origin Resource Sharing
+//Enable all cross origin requests via @CrossOrigin
+@CrossOrigin
 @RestController
-@RequestMapping("/posts")
 public class PostController {
 
+    @Autowired
+    private PostService postService;
 
-    //    Retrieving all posts
-//    http://localhost:8080/api/posts
-    @RequestMapping( value="/posts", method= RequestMethod.GET)
-    public String getPosts() {
-        return "All posts retrieved!";
+
+    @GetMapping("/posts")
+    public Iterable<Post> getPosts() {
+        return postService.getPosts();
     }
 
-    //   Create a post
-    @RequestMapping(value="/posts", method=RequestMethod.POST)
-    public String createPost(){
-        return "Post Created";
-    }
-
-
-    //  Get a specific Post
-    @RequestMapping(value="/posts/{postId}", method=RequestMethod.GET)
-    public String getPost(@PathVariable int postId){
-        return "Viewing Details of post " + postId ;
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<Object> getPost(@PathVariable int postId){
+        return postService.getPostById(postId);
     }
 
 
-    //  Delete a Specific Post
-    @RequestMapping(value="/posts/{postId}", method=RequestMethod.DELETE)
-    public String deletePost(@PathVariable int postId){
-        return "The post " + postId + " has been deleted" ;
+    @PostMapping("/posts")
+    public ResponseEntity<Object> savePost (@RequestBody Post post){
+        postService.savePost(post);
+        return new ResponseEntity<>("Post Created Successfully", HttpStatus.CREATED);
+    }
+
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity updatePost(@PathVariable int postId, @RequestBody Post thePost){
+        return postService.updatePost(postId, thePost);
     }
 
 
-
-    //    Updating a Post
-    @RequestMapping(value="/posts/{postId}", method=RequestMethod.PUT)
-    public Post updatePost(@PathVariable int postId, @RequestBody Post thePost){
-        return thePost;
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity deletePost(@PathVariable int postId){
+        return postService.deletePost(postId);
     }
+
 
 
     //    Retrieving posts for a particular user
