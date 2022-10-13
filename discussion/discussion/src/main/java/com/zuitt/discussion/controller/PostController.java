@@ -30,30 +30,32 @@ public class PostController {
 
 
     @PostMapping("/posts")
-    public ResponseEntity<Object> savePost (@RequestBody Post post){
-        postService.savePost(post);
+    public ResponseEntity<Object> createPost (@RequestHeader(value="Authorization") String token, @RequestBody Post post){
+        postService.createPost(token, post);
         return new ResponseEntity<>("Post Created Successfully", HttpStatus.CREATED);
     }
 
     @PutMapping("/posts/{postId}")
-    public ResponseEntity updatePost(@PathVariable int postId, @RequestBody Post thePost){
-        return postService.updatePost(postId, thePost);
+    public ResponseEntity updatePost(@PathVariable int postId,@RequestHeader(value="Authorization") String token, @RequestBody Post thePost){
+        return postService.updatePost(postId, token, thePost);
     }
 
 
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity deletePost(@PathVariable int postId){
-        return postService.deletePost(postId);
+    public ResponseEntity deletePost(@PathVariable int postId, @RequestHeader(value="Authorization") String stringToken){
+        return postService.deletePost(postId, stringToken);
     }
 
 
 
-    //    Retrieving posts for a particular user
+//    Retrieving posts for a particular user
 //    http://localhost:8080/posts/{userId}/myPosts
     @GetMapping("/myPosts")
-    public String getPostsFromUser(@RequestHeader(value="Authorization") String user){
-        return "Posts for " + user + " have been retrieved.";
+    public ResponseEntity<Object> getPosts(@RequestHeader(value="Authorization") String stringToken){
+        return new ResponseEntity<>(postService.getMyPosts(stringToken), HttpStatus.OK);
     }
+
+
 
 
 

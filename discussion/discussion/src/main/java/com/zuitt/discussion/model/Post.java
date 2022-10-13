@@ -20,7 +20,11 @@ public class Post {
 
     @Column(name="content")
     private String content;
-    
+
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private User user;
+
 
     // Constructors
     public Post(){}
@@ -58,7 +62,15 @@ public class Post {
     public void setContent(String content) {
         this.content = content;
     }
-                                                          
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "Post{" +

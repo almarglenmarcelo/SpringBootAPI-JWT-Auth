@@ -6,5 +6,11 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface UserRepository extends CrudRepository<User, Object> {
+
+
+//    Custom Method to Find a User using a Username
+    User findByUsername(String username);
+
+
 }

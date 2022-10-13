@@ -11,13 +11,14 @@ public interface PostService {
 
     Iterable<Post> getPosts();
 
-    void savePost(Post post);
+    void createPost(String token, Post post);
 
-    ResponseEntity deletePost(int postId);
+    ResponseEntity deletePost(int postId, String stringToken);
 
-    ResponseEntity updatePost(int postId, Post post);
+    ResponseEntity updatePost(int postId,String token, Post post);
 
     ResponseEntity getPostById(int postId);
 
+    Iterable<Post> getMyPosts(String stringToken);
 
 }

@@ -34,6 +34,15 @@ public class UserServiceImpl implements  UserService{
         return new ResponseEntity(userRepository.findById(id), HttpStatus.OK);
     }
 
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+
+//        If the findByUsername method returns null, it will throw a NullPointerException,
+//        to avoid this from happening, let's use .ofNullable() method
+        return Optional.ofNullable(userRepository.findByUsername(username));
+    }
+
     @Override
     public void saveUser(User user) {
         userRepository.save(user);
