@@ -75,7 +75,6 @@ public class PostServiceImpl implements PostService{
 
     }
 
-
     @Override
     public void createPost(String token, Post post) {
         User author = userRepository.findByUsername(jwtToken.getUsernameFromToken(token));

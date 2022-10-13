@@ -1,5 +1,6 @@
 package com.zuitt.discussion.services.users;
 
+import com.zuitt.discussion.config.JwtToken;
 import com.zuitt.discussion.model.User;
 import com.zuitt.discussion.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ import java.util.Optional;
 public class UserServiceImpl implements  UserService{
 
     private UserRepository userRepository;
+
+    @Autowired
+    private JwtToken jwtUtil;
+
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -80,4 +85,20 @@ public class UserServiceImpl implements  UserService{
     }
 
 
+    @Override
+    public ResponseEntity loginUser(User user, String token) {
+
+        User myUser = userRepository.findByUsername(user.getUsername());
+        String username = myUser.getUsername();
+        String authenticatedUsername = jwtUtil.getUsernameFromToken(token);
+
+
+        if(username.equals(authenticatedUsername)){
+            return new ResponseEntity<>(myUser, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Invalid Credentials!", HttpStatus.UNAUTHORIZED);
+        }
+
+    }
 }

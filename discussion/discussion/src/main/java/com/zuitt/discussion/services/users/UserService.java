@@ -21,4 +21,6 @@ public interface UserService {
 //    instance of the User class upon receiving a string
     Optional<User> findByUsername(String username);
 
+    ResponseEntity loginUser(User user, String token);
+
 }

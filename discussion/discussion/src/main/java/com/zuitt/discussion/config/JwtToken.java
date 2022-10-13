@@ -80,6 +80,8 @@ public class JwtToken implements Serializable {
         return claim;
     }
 
+
+
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
 

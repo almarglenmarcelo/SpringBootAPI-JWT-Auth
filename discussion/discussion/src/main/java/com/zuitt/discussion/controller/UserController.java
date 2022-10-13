@@ -17,6 +17,7 @@ import java.util.Map;
 @CrossOrigin
 public class UserController {
 
+
     @Autowired
     private UserService userService;
 
@@ -26,15 +27,23 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @PostMapping("/users")
-    public String addUser(@RequestBody User user){
-        userService.saveUser(user);
-        return "User created Successfully";
-    }
+//    @PostMapping("/users")
+//    public String addUser(@RequestBody User user){
+//        userService.saveUser(user);
+//        return "User created Successfully";
+//    }
 
     @GetMapping("/users/{userId}")
     public ResponseEntity getUserById(@PathVariable int userId){
-        return userService.getUserById(userId);
+//        return userService.getUserById(userId);
+        System.out.println("Logged In!");
+        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/users")
+    public ResponseEntity loginUser(@RequestBody User user, @RequestHeader(value="Authorization") String token){
+        return new ResponseEntity<>(userService.loginUser(user, token), HttpStatus.OK);
     }
 
     @PutMapping("/users/{userId}")
@@ -51,7 +60,7 @@ public class UserController {
 
 
 //    User Registration
-    @RequestMapping(value="/users/register", method = RequestMethod.POST)
+    @PostMapping("/users/register")
     public ResponseEntity<Object> register(@RequestBody Map<String, String> body) throws UserNotFoundException {
         String username = body.get("username");
 

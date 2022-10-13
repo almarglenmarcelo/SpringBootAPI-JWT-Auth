@@ -3,6 +3,7 @@ package com.zuitt.discussion.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Set;
 
 @Entity
@@ -26,6 +27,11 @@ public class User {
 //    Prevent infinite recursion with bidirectional relationships
     @JsonIgnore
     private Set<Post> posts;
+
+
+    @OneToMany(mappedBy = "enrollee", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Course> courses;
 
 
     public User() {
@@ -69,5 +75,21 @@ public class User {
 
     public void setPosts(Set<Post> posts) {
         this.posts = posts;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+
+    public void addCourse(Course tempCourse){
+
+        courses.add(tempCourse);
+
+        tempCourse.getEnrollee().setId(this.getId());
+
     }
 }
