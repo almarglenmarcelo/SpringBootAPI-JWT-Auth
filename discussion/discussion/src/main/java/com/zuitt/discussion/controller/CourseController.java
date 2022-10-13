@@ -17,6 +17,7 @@ import java.util.Map;
 @CrossOrigin
 public class CourseController {
 
+
     @Autowired
     private CourseService courseService;
 
@@ -27,6 +28,11 @@ public class CourseController {
     }
 
 
+    @GetMapping("/courses/{courseId}")
+    public ResponseEntity getCourseById(@PathVariable int courseId){
+        return courseService.getCourseById(courseId);
+    }
+
     @PostMapping("/courses")
     public ResponseEntity createCourse(@RequestBody Course course){
 
@@ -34,14 +40,18 @@ public class CourseController {
     }
 
     @DeleteMapping("/courses/{courseId}")
-    public ResponseEntity deleteCourse(@PathVariable int courseId){
-        System.out.println(courseId);
-        return courseService.deleteCourse(courseId);
+    public ResponseEntity deleteCourse(@PathVariable int courseId,@RequestBody User user, @RequestHeader(value="Authorization") String token){
+        return courseService.deleteCourse(courseId, user, token);
     }
 
     @PutMapping("/courses/{courseId}")
     public ResponseEntity updateCourse(@PathVariable int courseId, @RequestBody Course course){
         return  courseService.updateCourse(courseId, course);
+    }
+
+    @PostMapping("/courses/{courseId}")
+    public ResponseEntity addEnrolleeToCourse(@RequestBody User user, @RequestHeader(value="Authorization") String token, @PathVariable int courseId) {
+        return courseService.addEnrollees(user, token, courseId);
     }
 
 }

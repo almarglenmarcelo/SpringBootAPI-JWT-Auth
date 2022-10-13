@@ -15,9 +15,10 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
+
 @Service
 @Transactional
-public class CourseServiceImpl implements CourseService{
+public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private CourseRepository courseRepository;
@@ -26,12 +27,16 @@ public class CourseServiceImpl implements CourseService{
     private UserRepository userRepository;
 
     @Autowired
-    private JwtToken jwtToken;
-
+    private JwtToken jwtUtil;
 
     @Override
     public Iterable<Course> getCourses() {
         return courseRepository.findAll();
+    }
+
+    @Override
+    public ResponseEntity getCourseById(int courseId) {
+        return new ResponseEntity<>(courseRepository.findById(courseId), HttpStatus.OK);
     }
 
     @Override
@@ -43,16 +48,28 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public ResponseEntity deleteCourse(int postId) {
+    public ResponseEntity deleteCourse(int postId, User user, String token) {
 
         Optional<Course> courseToBeDeleted = courseRepository.findById(postId);
+        User theUser = userRepository.findByUsername(user.getUsername());
 
-        if(courseToBeDeleted.isPresent()){
-            courseRepository.deleteById(postId);
-            return new ResponseEntity<>("Course has been Deleted!", HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>("Course Doesn't Exist!", HttpStatus.BAD_REQUEST);
+
+
+        if(courseToBeDeleted.isEmpty() || theUser == null){
+            if(courseToBeDeleted.isEmpty())
+                return new ResponseEntity<>("Course Doesn't Exist!", HttpStatus.BAD_REQUEST);
+            else
+                return new ResponseEntity<>("User does not exist!", HttpStatus.BAD_REQUEST);
+
+        }else if( !jwtUtil.getUsernameFromToken(token).equals("admin")){
+            return new ResponseEntity<>("You have no authority to delete this!", HttpStatus.UNAUTHORIZED);
         }
+
+//        String authorizedUsername = jwtUtil.getUsernameFromToken(token);
+//        String username = theUser.getUsername();
+
+        courseRepository.deleteById(postId);
+        return new ResponseEntity<>(String.format("The Course %s has been Deleted! ", courseToBeDeleted.get().getName() ), HttpStatus.OK);
 
     }
 
@@ -66,7 +83,7 @@ public class CourseServiceImpl implements CourseService{
             courseToBeUpdated.setName(course.getName());
             courseToBeUpdated.setDescription(course.getDescription());
             courseToBeUpdated.setPrice(course.getPrice());
-            courseToBeUpdated.setEnrollee(course.getEnrollee());
+            courseToBeUpdated.setEnrollees(course.getEnrollees());
 
             courseRepository.save(courseToBeUpdated);
         }else {
@@ -77,12 +94,38 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public ResponseEntity getCourseById(int postId) {
-        return null;
+    public ResponseEntity addEnrollees(User user, String token, int courseId) {
+
+        User userToBeAdded = userRepository.findByUsername(user.getUsername());
+        Optional<Course> tempCourse = courseRepository.findById(courseId);
+        String authenticatedUsername = jwtUtil.getUsernameFromToken(token);
+        String username;
+        Course theCourse;
+
+        if(userToBeAdded != null) {
+            username = userToBeAdded.getUsername();
+        }
+        else {
+            return new ResponseEntity<>("User does not exist!", HttpStatus.BAD_REQUEST);
+        }
+
+        if(tempCourse.isEmpty()) {
+            return new ResponseEntity<>("Course does not exist!", HttpStatus.BAD_REQUEST);
+        }
+        else {
+            theCourse = tempCourse.get();
+        }
+
+
+        if(username.equals(authenticatedUsername)) {
+            theCourse.addEnrollee(userToBeAdded);
+            return new ResponseEntity<>(String.format("The user %s has been added as Enrollee of course %s", userToBeAdded.getUsername(), theCourse.getName()), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("The user is not authorized to be add", HttpStatus.UNAUTHORIZED);
+        }
+
+
     }
 
-    @Override
-    public Iterable<Course> getMyCourses(String stringToken) {
-        return null;
-    }
 }

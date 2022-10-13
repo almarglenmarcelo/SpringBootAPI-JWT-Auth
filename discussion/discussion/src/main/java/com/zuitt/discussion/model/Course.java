@@ -1,7 +1,12 @@
 package com.zuitt.discussion.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name="courses")
@@ -23,9 +28,13 @@ public class Course {
     private Double price;
 
 
-    @ManyToOne
-    @JoinColumn(name="enrollee_id")
-    private User enrollee;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnore
+    @JoinTable( name="course_user",
+                joinColumns = @JoinColumn(name="course_id"),
+                inverseJoinColumns = @JoinColumn(name="user_id"))
+    private List<User> enrollees;
 
     public Course() {}
 
@@ -68,24 +77,24 @@ public class Course {
         this.price = price;
     }
 
-
-    public User getEnrollee() {
-        return enrollee;
+    public List<User> getEnrollees() {
+        return enrollees;
     }
 
-    public void setEnrollee(User enrollee) {
-        this.enrollee = enrollee;
+    public void setEnrollees(List<User> enrollees) {
+        this.enrollees = enrollees;
+    }
+
+//    Add convenience Method
+    public void addEnrollee(User theUser) {
+        if(enrollees == null)
+            enrollees = new ArrayList<>();
+
+
+        enrollees.add(theUser);
+
+
     }
 
 
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", enrollee=" + enrollee +
-                '}';
-    }
 }

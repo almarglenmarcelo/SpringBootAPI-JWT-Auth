@@ -15,6 +15,7 @@ import java.util.Optional;
 @Transactional
 public class UserServiceImpl implements  UserService{
 
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -83,6 +84,7 @@ public class UserServiceImpl implements  UserService{
 
         return new ResponseEntity((String.format("The user %s has been deleted successfully!", user.getUsername())), HttpStatus.OK);
     }
+
 
 
     @Override

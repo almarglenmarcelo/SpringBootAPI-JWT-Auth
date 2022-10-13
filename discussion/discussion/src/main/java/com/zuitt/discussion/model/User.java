@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -29,9 +30,13 @@ public class User {
     private Set<Post> posts;
 
 
-    @OneToMany(mappedBy = "enrollee", cascade = CascadeType.ALL)
+
+    @ManyToMany( fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonIgnore
-    private Set<Course> courses;
+    @JoinTable( name="course_user",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="course_id"))
+    private List<Course> enrollments;
 
 
     public User() {
@@ -77,19 +82,13 @@ public class User {
         this.posts = posts;
     }
 
-    public Set<Course> getCourses() {
-        return courses;
+    public List<Course> getCourses() {
+        return enrollments;
     }
 
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
+    public void setCourses(List<Course> courses) {
+        this.enrollments = courses;
     }
 
-    public void addCourse(Course tempCourse){
 
-        courses.add(tempCourse);
-
-        tempCourse.getEnrollee().setId(this.getId());
-
-    }
 }
