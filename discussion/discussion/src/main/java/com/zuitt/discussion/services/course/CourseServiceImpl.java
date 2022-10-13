@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -36,14 +37,18 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public ResponseEntity getCourseById(int courseId) {
-        return new ResponseEntity<>(courseRepository.findById(courseId), HttpStatus.OK);
+
+
+        return new ResponseEntity<>(courseRepository.findById(courseId) , HttpStatus.OK);
     }
+
+
 
     @Override
     public ResponseEntity createCourse(Course course) {
 
         courseRepository.save(course);
-        return new ResponseEntity<>("Course Added!", HttpStatus.CREATED);
+        return new ResponseEntity<>(String.format("The course %s has been added! Id of %s.", course.getName(), course.getId()), HttpStatus.CREATED);
 
     }
 
@@ -51,46 +56,57 @@ public class CourseServiceImpl implements CourseService {
     public ResponseEntity deleteCourse(int postId, User user, String token) {
 
         Optional<Course> courseToBeDeleted = courseRepository.findById(postId);
-        User theUser = userRepository.findByUsername(user.getUsername());
 
+        User theAdmin = userRepository.findByUsername(jwtUtil.getUsernameFromToken(token));
+        User loggedInUser = userRepository.findByUsername(user.getUsername());
 
+        if (theAdmin != null && loggedInUser.getUsername().equals(theAdmin.getUsername())) {
 
-        if(courseToBeDeleted.isEmpty() || theUser == null){
             if(courseToBeDeleted.isEmpty())
-                return new ResponseEntity<>("Course Doesn't Exist!", HttpStatus.BAD_REQUEST);
-            else
-                return new ResponseEntity<>("User does not exist!", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(String.format("Course does not exists!! "), HttpStatus.BAD_REQUEST);
 
-        }else if( !jwtUtil.getUsernameFromToken(token).equals("admin")){
-            return new ResponseEntity<>("You have no authority to delete this!", HttpStatus.UNAUTHORIZED);
+
+            courseRepository.deleteById(postId);
+            return new ResponseEntity<>(String.format("The Course %s has been Deleted! ", courseToBeDeleted.get().getName() ), HttpStatus.OK);
+
+        }else {
+            return new ResponseEntity<>(String.format("You are authorized to delete this! "), HttpStatus.UNAUTHORIZED);
         }
 
-//        String authorizedUsername = jwtUtil.getUsernameFromToken(token);
-//        String username = theUser.getUsername();
-
-        courseRepository.deleteById(postId);
-        return new ResponseEntity<>(String.format("The Course %s has been Deleted! ", courseToBeDeleted.get().getName() ), HttpStatus.OK);
 
     }
 
     @Override
-    public ResponseEntity updateCourse(int courseId, Course course) {
-        Optional<Course> theCourse = courseRepository.findById(courseId);
+    public ResponseEntity updateCourse(int courseId, String token, Course course) {
 
-        Course courseToBeUpdated;
-        if(theCourse.isPresent()){
-            courseToBeUpdated = theCourse.get();
-            courseToBeUpdated.setName(course.getName());
-            courseToBeUpdated.setDescription(course.getDescription());
-            courseToBeUpdated.setPrice(course.getPrice());
-            courseToBeUpdated.setEnrollees(course.getEnrollees());
+        User theAdmin = userRepository.findByUsername(jwtUtil.getUsernameFromToken(token));
 
-            courseRepository.save(courseToBeUpdated);
-        }else {
-            return new ResponseEntity<>("Course Does not exists!", HttpStatus.BAD_REQUEST);
+        if(theAdmin != null) {
+
+            Optional<Course> theCourse = courseRepository.findById(courseId);
+            Course courseToBeUpdated;
+
+            if(theCourse.isPresent()){
+                courseToBeUpdated = theCourse.get();
+                courseToBeUpdated.setName(course.getName());
+                courseToBeUpdated.setDescription(course.getDescription());
+                courseToBeUpdated.setPrice(course.getPrice());
+                courseToBeUpdated.setEnrollees(course.getEnrollees());
+
+                courseRepository.save(courseToBeUpdated);
+
+
+            }else {
+                return new ResponseEntity<>("Course Does not exists!", HttpStatus.BAD_REQUEST);
+            }
+
+            return new ResponseEntity<>("Course Updated Successfully!", HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("You are authorized to Update this course!", HttpStatus.UNAUTHORIZED);
         }
 
-        return new ResponseEntity<>("Course Updated Successfully!", HttpStatus.OK);
+
     }
 
     @Override

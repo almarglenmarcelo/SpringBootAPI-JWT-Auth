@@ -15,7 +15,7 @@ public interface CourseService {
 
     ResponseEntity deleteCourse(int courseId, User user, String token);
 
-    ResponseEntity updateCourse(int courseId, Course course);
+    ResponseEntity updateCourse(int courseId, String token, Course course);
 
     ResponseEntity addEnrollees(User user, String token, int courseId);
 

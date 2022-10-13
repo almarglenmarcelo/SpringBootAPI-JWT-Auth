@@ -30,6 +30,7 @@ public class CourseController {
 
     @GetMapping("/courses/{courseId}")
     public ResponseEntity getCourseById(@PathVariable int courseId){
+
         return courseService.getCourseById(courseId);
     }
 
@@ -45,8 +46,8 @@ public class CourseController {
     }
 
     @PutMapping("/courses/{courseId}")
-    public ResponseEntity updateCourse(@PathVariable int courseId, @RequestBody Course course){
-        return  courseService.updateCourse(courseId, course);
+    public ResponseEntity updateCourse(@PathVariable int courseId, @RequestHeader(value="Authorization") String token, @RequestBody Course course){
+        return  courseService.updateCourse(courseId, token, course);
     }
 
     @PostMapping("/courses/{courseId}")
