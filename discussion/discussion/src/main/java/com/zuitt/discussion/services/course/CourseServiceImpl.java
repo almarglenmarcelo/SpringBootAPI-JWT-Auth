@@ -63,14 +63,14 @@ public class CourseServiceImpl implements CourseService {
         if (theAdmin != null && loggedInUser.getUsername().equals(theAdmin.getUsername())) {
 
             if(courseToBeDeleted.isEmpty())
-                return new ResponseEntity<>(String.format("Course does not exists!! "), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(String.format("Course does not exists!! "), HttpStatus.NOT_FOUND);
 
 
             courseRepository.deleteById(postId);
             return new ResponseEntity<>(String.format("The Course %s has been Deleted! ", courseToBeDeleted.get().getName() ), HttpStatus.OK);
 
         }else {
-            return new ResponseEntity<>(String.format("You are authorized to delete this! "), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(String.format("You are UNAUTHORIZED to delete this! "), HttpStatus.UNAUTHORIZED);
         }
 
 
@@ -81,7 +81,7 @@ public class CourseServiceImpl implements CourseService {
 
         User theAdmin = userRepository.findByUsername(jwtUtil.getUsernameFromToken(token));
 
-        if(theAdmin != null) {
+        if(theAdmin.getUsername().equals("admin")) {
 
             Optional<Course> theCourse = courseRepository.findById(courseId);
             Course courseToBeUpdated;
@@ -103,7 +103,7 @@ public class CourseServiceImpl implements CourseService {
             return new ResponseEntity<>("Course Updated Successfully!", HttpStatus.OK);
 
         } else {
-            return new ResponseEntity<>("You are authorized to Update this course!", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("You are UNAUTHORIZED to Update this course!", HttpStatus.UNAUTHORIZED);
         }
 
 
