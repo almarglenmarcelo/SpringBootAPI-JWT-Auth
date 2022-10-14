@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 13, 2022 at 02:52 PM
+-- Generation Time: Oct 14, 2022 at 02:34 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -40,7 +40,11 @@ CREATE TABLE `courses` (
 
 INSERT INTO `courses` (`id`, `description`, `name`, `price`) VALUES
 (1, 'Mathematics 101 Updated New', 'Mathematics', 800),
-(2, 'Science 1012 Updated New', 'Science 102', 800);
+(2, 'Science 103 Updated New', 'Science 103', 800),
+(11, 'Calculus 101', 'Calculus', 350),
+(10, 'Psychology 101', 'Psychology', 350),
+(12, 'Volcanology 104', 'Volcanology 104', 800),
+(13, 'Data Algorithms 101 Updated', 'Data Algorithms Updated', 1500);
 
 -- --------------------------------------------------------
 
@@ -59,6 +63,9 @@ CREATE TABLE `course_user` (
 
 INSERT INTO `course_user` (`user_id`, `course_id`) VALUES
 (8, 1),
+(8, 2),
+(8, 10),
+(8, 11),
 (9, 1);
 
 -- --------------------------------------------------------
@@ -112,7 +119,8 @@ INSERT INTO `users` (`id`, `password`, `username`) VALUES
 (7, '$2a$10$l9Yoc4zmZD5j.DTl.yA9.uXs5YAbd6qjEZiKZFT1i2NqX.eI/On2.', 'John'),
 (8, '$2a$10$Go0FAOVMO7OQmp/mGJ9uSuIeLCPSnbMlRzcG.SaJkx.3sErt2R.C2', 'Joanna'),
 (9, '$2a$10$GT0TrIcRlsQ1VxwOl4P.Pe807Usr4v15Zy5INmt8cZPtWA4b8jL9K', 'Doe'),
-(10, '$2a$10$i9MYJCGuEbFVK2rjq5fOFOzt57/2zmoG3aRXijW7mQxQtdIDCxycS', 'admin');
+(10, '$2a$10$i9MYJCGuEbFVK2rjq5fOFOzt57/2zmoG3aRXijW7mQxQtdIDCxycS', 'admin'),
+(11, '$2a$10$mHAXogo7OGOpyOoh73NPuOrp9xqAWpDVxsxTPlG316jfjJuiGRCsC', 'Glen');
 
 --
 -- Indexes for dumped tables
@@ -152,7 +160,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `posts`
@@ -164,7 +172,7 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

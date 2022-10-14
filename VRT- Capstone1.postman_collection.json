@@ -148,7 +148,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"Doe\",\r\n    \"password\": \"doe12345\"\r\n}",
+							"raw": "{\r\n    \"username\": \"Joanna\",\r\n    \"password\": \"joanna1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -197,7 +197,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"Joanna\"\r\n  \r\n}",
+							"raw": "{\r\n    \"username\": \"Joanna\",\r\n    \"password\": \"joanna1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -218,6 +218,49 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Enroll Course",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEb2UiLCJleHAiOjE2NjU2NzM5OTEsInVzZXIiOjksImlhdCI6MTY2NTY1NTk5MX0.M0lPUO84uhHIA5q0EwTKXVPZYQRlHXXsxcxRkh61B2zV2T6172ZVsHUs6Kuym_ZLShmIDzFhDAADYZxFeBnS2Q",
+								"description": "Doe",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKb2FubmEiLCJleHAiOjE2NjU3MTkxNjYsInVzZXIiOjgsImlhdCI6MTY2NTcwMTE2Nn0.CGqHu5MUi7ifD_gkpV7uOSROr4GUMVZWcvkP15wYhI112Y7k6-W4vlgobuuOmq0uPAt3G-j4GXn-3e5ihdUYtw",
+								"description": "Joanna",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Joanna\",\r\n    \"password\": \"joanna1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/courses/15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"courses",
+								"15"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -228,10 +271,18 @@
 					"name": "Create Course",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY2NTcxNzY5MiwidXNlciI6MTAsImlhdCI6MTY2NTY5OTY5Mn0.JvrCDkbTp_cwPHeheDL84ygMbxhlsr6z3hY_zly536PuKXJGXhPsPeLKutGntu3sSrPvRDn6RgGimtel241lHQ",
+								"description": "admin",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Calculus\",\r\n    \"description\": \"Calculus 101\",\r\n    \"price\": 5000\r\n    \r\n}",
+							"raw": "{\r\n    \"name\": \"Data Structures\",\r\n    \"description\": \"Data Structures 101\",\r\n    \"price\": 1000\r\n    \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -256,7 +307,14 @@
 					"name": "Get All Courses",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"url": {
 							"raw": "http://localhost:8080/courses",
 							"protocol": "http",
@@ -277,7 +335,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/courses/1",
+							"raw": "http://localhost:8080/courses/12",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -285,7 +343,7 @@
 							"port": "8080",
 							"path": [
 								"courses",
-								"1"
+								"12"
 							]
 						}
 					},
@@ -295,10 +353,18 @@
 					"name": "Update Course",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY2NTcxNzY5MiwidXNlciI6MTAsImlhdCI6MTY2NTY5OTY5Mn0.JvrCDkbTp_cwPHeheDL84ygMbxhlsr6z3hY_zly536PuKXJGXhPsPeLKutGntu3sSrPvRDn6RgGimtel241lHQ",
+								"description": "admin",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Science 102\",\r\n    \"description\": \"Science 101 Updated New\",\r\n    \"price\": 800\r\n}",
+							"raw": "{\r\n    \"name\": \"Volcanology 104\",\r\n    \"description\": \"Volcanology 104\",\r\n    \"price\": 800\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -306,7 +372,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/courses/2",
+							"raw": "http://localhost:8080/courses/15",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -314,7 +380,7 @@
 							"port": "8080",
 							"path": [
 								"courses",
-								"2"
+								"15"
 							]
 						}
 					},
@@ -327,14 +393,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY2NTY4MjA1NSwidXNlciI6MTAsImlhdCI6MTY2NTY2NDA1NX0.hvTb7bWM0jAumkwWAmXl9BNWZxTQbBYg4DOIoAWsEG7Ky_NYI8Koim9zJwHQbAl8JZhpm59P2dU5SnttLmpazg",
+								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY2NTcxODQ1OSwidXNlciI6MTAsImlhdCI6MTY2NTcwMDQ1OX0.gnQr4CgTv1bzQkX58dsIZGrIZMVHTkfqnoDz1MFecCtEiY05FS2X8qXZwQaV29ByINsStmfWTZLvbaVthnco3Q",
 								"description": "admin",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEb2UiLCJleHAiOjE2NjU2ODMyNTIsInVzZXIiOjksImlhdCI6MTY2NTY2NTI1Mn0.aeMg8XFchknUxPkEFHpBrpHSP8B5ZilkNQN6Fqg5HFjv3JwL8oxUwKoP010lwFbgTevYuqDjAmUEfxsvgimTnA",
-								"description": "Doe",
 								"type": "text",
 								"disabled": true
 							}
@@ -349,7 +409,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/courses/8",
+							"raw": "http://localhost:8080/courses/14",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -357,50 +417,7 @@
 							"port": "8080",
 							"path": [
 								"courses",
-								"8"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Student To A Course",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEb2UiLCJleHAiOjE2NjU2NzM5OTEsInVzZXIiOjksImlhdCI6MTY2NTY1NTk5MX0.M0lPUO84uhHIA5q0EwTKXVPZYQRlHXXsxcxRkh61B2zV2T6172ZVsHUs6Kuym_ZLShmIDzFhDAADYZxFeBnS2Q",
-								"description": "Doe",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKb2FubmEiLCJleHAiOjE2NjU2Nzg5MTEsInVzZXIiOjgsImlhdCI6MTY2NTY2MDkxMX0.GBnabRKHtKdX4Dw1ruLmqtsFCP-K6kr-zHaFKGMHC0iKgG7Q-Cd5DdlGvTfq3YS5RmSPgNZ1vj1OQcpKEOFmjA",
-								"description": "Joanna",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"Joanna\",\r\n    \"password\": \"joanna1234\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/courses/3",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"courses",
-								"3"
+								"14"
 							]
 						}
 					},
